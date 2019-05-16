@@ -74,15 +74,17 @@ public class DevDatabaseConfig {
         sessionFactory.setDataSource(oracleDataSource);
         sessionFactory.setHibernateProperties(hibernateProperties());
 
+        sessionFactory.setPackagesToScan( new String[]{"org.humanResources"});
+
         /*
         String[] mappingResources = new String[] {
-                "hibernate/model/User.hbm.xml",
+                "hibernate/model/Account.hbm.xml",
                 "hibernate/model/Dashboard.hbm.xml",
                 "hibernate/model/Widget.hbm.xml",
                 "hibernate/model/WidgetType.hbm.xml"
         };*/
         /*String[] mappingResources = new String[] {
-                "hibernate/model/User.hbm.xml",
+                "hibernate/model/Account.hbm.xml",
                 "hibernate/model/PowerAgency.hbm.xml",
                 "hibernate/model/Unit.hbm.xml",
                 "hibernate/model/UnitGroup.hbm.xml",
@@ -116,7 +118,7 @@ public class DevDatabaseConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("org.humanResources");
+        factory.setPackagesToScan( new String[]{"org.humanResources"});
         factory.setDataSource(oracleDataSource());
 
         // This will trigger the creation of the entity manager factory
