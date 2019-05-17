@@ -71,7 +71,7 @@ public class ServicesConfig {
     }*/
 
     @Bean(name="passwordEncoder")
-    protected BCryptPasswordEncoder passwordEncoder() {
+    protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
