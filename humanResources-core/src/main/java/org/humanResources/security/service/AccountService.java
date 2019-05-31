@@ -4,6 +4,7 @@ package org.humanResources.security.service;
 //import com.querydsl.core.types.Predicate;
 //import org.humanResources.security.entity.*;
 import org.humanResources.security.model.Account;
+import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.security.repository.AccountQueryFilter;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class AccountService {
 
 
     @Transactional
-    public Page<Account> findByNameStartsWith(String name){
+    public Page<AccountImpl> findByNameStartsWith(String name){
 
   /*      Pageable pageRequest = new PageRequest(0, 1000);
         Page<Account> accounts = accountRepository.findByNameStartsWith(name,pageRequest);
@@ -42,7 +43,7 @@ public class AccountService {
 
         final PageRequest pageRequest = PageRequest.of(0, 20);
 
-        Page<Account> accounts = accountRepository.findAll(pageRequest);
+        Page<AccountImpl> accounts = accountRepository.findAll(pageRequest);
 
 /*        Predicate accountPredicate = AccountPredicates.firstOrLastNameStartsWith(name);
         Page<Account> accounts = accountRepository.findAll(accountPredicate,page1);
@@ -53,24 +54,24 @@ public class AccountService {
 
 
     @Transactional
-    public Account findById(Long id){
+    public AccountImpl findById(Long id){
 
         //Account account = accountRepository.findOne(id);
-        Account account = accountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not found account with id "+id));
+        AccountImpl account = accountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not found account with id "+id));
 
         return account;
     }
 
     @Transactional
-    public Account findByName(String name){
+    public AccountImpl findByName(String name){
 
-        Account account = accountRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Not found account with name "+name));
+        AccountImpl account = accountRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Not found account with name "+name));
 
         return account;
     }
 
     @Transactional
-    public Page<Account> findByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable){
+    public Page<AccountImpl> findByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable){
         return accountRepository.searchByFilter(accountQueryFilter, pageable);
     }
 
@@ -100,7 +101,7 @@ public class AccountService {
 
 
     @Transactional
-    public Account save(Account account){
+    public AccountImpl save(AccountImpl account){
         if(account.getId()==null){
             account.setPassword(passwordEncoder.encode(account.getPassword()));
         }

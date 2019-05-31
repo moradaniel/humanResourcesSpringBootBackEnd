@@ -9,7 +9,7 @@ public class StringUtils {
 	 * Utils should be accessed in a static way.
 	 *  
 	 */
-	private StringUtils(){};
+	private StringUtils (){};
 	
 	public static String getStringsSeparatedBy(String separator, String... elements) {
 		StringBuilder result = new StringBuilder();

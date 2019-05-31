@@ -1,15 +1,20 @@
 package org.humanResources.security.repository;
 
 import org.humanResources.security.model.Account;
+import org.humanResources.security.model.AccountImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ implements AccountRepositoryCustom {
@@ -22,7 +27,7 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
     private EntityManager em;
 
     @Override
-    public Page<Account> searchByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable) {
+    public Page<AccountImpl> searchByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable) {
   /*
         org.humanResources.security.entity.QAccountImpl account = org.humanResources.security.entity.QAccountImpl.accountImpl;
         QAccountRoleAssociation accountRoleAssociation = QAccountRoleAssociation.accountRoleAssociation;
@@ -49,9 +54,9 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
 
         StringBuffer queryBuilder = new StringBuffer();
         //queryBuilder.append(" Select account ");
-        queryBuilder.append(" from Account account ");
-   //     queryBuilder.append(" left join fetch account.roles roles ");
-   //     queryBuilder.append(" left join fetch roles.role ");
+        queryBuilder.append(" from AccountImpl account ");
+        queryBuilder.append(" left join fetch account.roles roles ");
+        queryBuilder.append(" left join fetch roles.role ");
 
 
         buildWhereClause(accountQueryFilter,wheres,paramNames,values);
@@ -71,7 +76,7 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
 
 
 
-        return new PageImpl<Account>(
+        return new PageImpl<AccountImpl>(
                 RepositoryHelper.findByNamedParam(em,select+queryWithOrdering, paramNames, values, pageable != null ? new Long(pageable.getOffset()).intValue() : null, pageable != null ? pageable.getPageSize() : null),
                 pageable,
                 RepositoryHelper.countByNamedParam(em,countSelect+queryWithoutOrdering, paramNames, values)
@@ -80,14 +85,32 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
     }
 
 
+    @Override
+    public Optional<AccountImpl> loadByName(String name) {
+        int page = 0;
+        int size = 1;
+
+        AccountQueryFilter productFilter = new AccountQueryFilter();
+        productFilter.addNames(name);
+        //productFilter.setFacets(Arrays.asList(ProductFilter.ProductFacet.values()));
+
+        Page<AccountImpl> result = searchByFilter(productFilter,PageRequest.of(page,size));
+
+        return result.getContent().stream().findFirst();
+    }
+
+
+
     private void buildWhereClause(AccountQueryFilter accountQueryFilter,
                                   List<String> wheres, List<String> paramNames, List<Object> values) {
         if (accountQueryFilter != null) {
 
-            if (!StringUtils.isEmpty(accountQueryFilter.getName())) {
-                wheres.add("  account.name = :name ");
-                paramNames.add("name");
-                values.add(accountQueryFilter.getName());
+            List<String> names = accountQueryFilter.getNames();
+
+            if(!CollectionUtils.isEmpty(names)){
+                wheres.add("  account.name IN ( :names )  ");
+                paramNames.add("names");
+                values.add(names);
             }
 
             if (accountQueryFilter.getEnabled()!=null) {

@@ -146,9 +146,9 @@ public class AccountBuilder {
     }
 */
 
-    public Account build() {
+    public AccountImpl build() {
 
-        Account account =  new Account();
+        AccountImpl account =  new AccountImpl();
         account.setName(this.name);
         /*
         user.setUserName(this.userName);*/
