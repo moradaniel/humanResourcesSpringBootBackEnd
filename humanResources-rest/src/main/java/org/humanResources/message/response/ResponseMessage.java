@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.message.response;
+package org.humanResources.message.response;
 
 public class ResponseMessage {
 	private String message;

@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.security.jwt;
+package org.humanResources.security.jwt;
 
 import java.io.IOException;
 

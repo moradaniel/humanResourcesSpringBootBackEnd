@@ -1,6 +1,6 @@
-package com.baeldung.springbootsecurityrest.security.jwt;
+package org.humanResources.security.jwt;
 
-import com.baeldung.springbootsecurityrest.security.services.UserPrinciple;
+import org.humanResources.security.services.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

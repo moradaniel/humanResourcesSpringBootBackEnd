@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.basicauth.config;
+package org.humanResources.basicauth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

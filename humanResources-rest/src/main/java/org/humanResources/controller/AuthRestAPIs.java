@@ -1,11 +1,11 @@
-package com.baeldung.springbootsecurityrest.controller;
+package org.humanResources.controller;
 
 import javax.validation.Valid;
 
-import com.baeldung.springbootsecurityrest.message.request.LoginForm;
-import com.baeldung.springbootsecurityrest.message.response.JwtResponse;
+import org.humanResources.message.request.LoginForm;
+import org.humanResources.message.response.JwtResponse;
 
-import com.baeldung.springbootsecurityrest.security.jwt.JwtProvider;
+import org.humanResources.security.jwt.JwtProvider;
 import org.humanResources.security.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

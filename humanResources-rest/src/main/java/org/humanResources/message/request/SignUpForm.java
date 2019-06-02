@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.message.request;
+package org.humanResources.message.request;
 
 import java.util.Set;
 

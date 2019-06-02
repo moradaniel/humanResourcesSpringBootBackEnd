@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.message.response;
+package org.humanResources.message.response;
 
 import java.util.Collection;
 

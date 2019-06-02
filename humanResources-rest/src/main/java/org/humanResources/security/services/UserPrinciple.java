@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.security.services;
+package org.humanResources.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.humanResources.security.model.Account;

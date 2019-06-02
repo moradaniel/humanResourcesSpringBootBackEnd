@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.controller;
+package org.humanResources.controller;
 
 import org.humanResources.security.model.User2;
 import org.springframework.http.MediaType;

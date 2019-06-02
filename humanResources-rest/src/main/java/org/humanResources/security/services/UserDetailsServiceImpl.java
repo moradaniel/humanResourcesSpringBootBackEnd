@@ -1,9 +1,8 @@
-package com.baeldung.springbootsecurityrest.security.services;
+package org.humanResources.security.services;
 
 
 import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.repository.AccountRepository;
-import org.humanResources.security.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.userdetails.UserDetails;

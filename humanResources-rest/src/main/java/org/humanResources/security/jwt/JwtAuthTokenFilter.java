@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.security.jwt;
+package org.humanResources.security.jwt;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baeldung.springbootsecurityrest.security.services.UserDetailsServiceImpl;
+import org.humanResources.security.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

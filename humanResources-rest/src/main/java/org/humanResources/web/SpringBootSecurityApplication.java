@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.web;
+package org.humanResources.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@ComponentScan(basePackages = {"org.humanResources","com.baeldung.springbootsecurityrest"})
+@ComponentScan(basePackages = {"org.humanResources"})
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class},
-        scanBasePackages = {"org.humanResources","com.baeldung.springbootsecurityrest"})
+        scanBasePackages = {"org.humanResources"})
 
-@EnableJpaRepositories(basePackages = {"org.humanResources","com.baeldung.springbootsecurityrest"})
+@EnableJpaRepositories(basePackages = {"org.humanResources"})
 @EntityScan({"org.humanResources","com.baeldung.springbootsecurityrest"})
 
 public class SpringBootSecurityApplication {

@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.security.web;
+package org.humanResources.security.web;
 
 
 import org.humanResources.security.model.AccountImpl;

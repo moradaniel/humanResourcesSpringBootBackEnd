@@ -1,4 +1,4 @@
-package com.baeldung.springbootsecurityrest.config;
+package org.humanResources.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

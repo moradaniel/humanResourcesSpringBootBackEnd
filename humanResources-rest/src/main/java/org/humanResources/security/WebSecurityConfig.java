@@ -1,8 +1,8 @@
-package com.baeldung.springbootsecurityrest.security;
+package org.humanResources.security;
 
-import com.baeldung.springbootsecurityrest.security.jwt.JwtAuthEntryPoint;
-import com.baeldung.springbootsecurityrest.security.jwt.JwtAuthTokenFilter;
-import com.baeldung.springbootsecurityrest.security.services.UserDetailsServiceImpl;
+import org.humanResources.security.jwt.JwtAuthEntryPoint;
+import org.humanResources.security.jwt.JwtAuthTokenFilter;
+import org.humanResources.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
