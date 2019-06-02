@@ -6,6 +6,7 @@ import org.humanResources.common.BaseTest;
 import org.humanResources.environment.BaseTestEnvironmentImpl;
 
 import org.humanResources.security.model.Account;
+import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.repository.AccountQueryFilter;
 import org.humanResources.security.service.AccountService;
 import org.junit.*;
@@ -62,9 +63,9 @@ public class AccountServiceITest extends BaseTest {
         final PageRequest page = new PageRequest(0, 20);
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
-        accountQueryFilter.setName(BaseTestEnvironmentImpl.User_defaultUser);
+        accountQueryFilter.addNames(BaseTestEnvironmentImpl.User_defaultUser);
 
-        Page<Account> accounts = accountService.findByFilter(accountQueryFilter,page);
+        Page<AccountImpl> accounts = accountService.findByFilter(accountQueryFilter,page);
 
         assertThat(accounts).size().isEqualTo(1);
 
@@ -82,7 +83,7 @@ public class AccountServiceITest extends BaseTest {
 
         String newName = "defaultUser2";
 
-        Account account = baseTestEnvironment.getAccounts().get(BaseTestEnvironmentImpl.User_defaultUser);
+        AccountImpl account = baseTestEnvironment.getAccounts().get(BaseTestEnvironmentImpl.User_defaultUser);
 
         account = accountService.findById(account.getId());
 

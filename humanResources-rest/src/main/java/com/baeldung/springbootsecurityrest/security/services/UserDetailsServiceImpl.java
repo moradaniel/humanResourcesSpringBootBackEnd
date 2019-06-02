@@ -1,6 +1,7 @@
 package com.baeldung.springbootsecurityrest.security.services;
 
 
+import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.security.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Account user = userRepository.findByName(username).orElseThrow(
-				() -> new UsernameNotFoundException("User2 Not Found with -> username or email : " + username));
+/*		AccountImpl user = userRepository.findByName(username).orElseThrow(
+				() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
+*/
+		AccountImpl user = userRepository.loadByName(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
+
 
 		return UserPrinciple.build(user);
 	}

@@ -40,14 +40,15 @@ public class UserPrinciple implements UserDetails {
 
     public static UserPrinciple build(Account user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName().name())
+                new SimpleGrantedAuthority(role.getRole().getName())
         ).collect(Collectors.toList());
 
         return new UserPrinciple(
                 //user.getId(),
                 user.getName(),
                 user.getName(),
-                user.getEmail(),
+                //user.getEmail(),
+                "theemail@test.com",
                 user.getPassword(),
                 authorities
         );
