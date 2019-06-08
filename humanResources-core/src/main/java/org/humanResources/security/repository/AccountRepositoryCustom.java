@@ -14,4 +14,6 @@ public interface AccountRepositoryCustom {
 
     Optional<AccountImpl> loadByName(String name);
 
+    Optional<AccountImpl> loadById(Long id);
+
 }

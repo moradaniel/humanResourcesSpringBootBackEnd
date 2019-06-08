@@ -99,6 +99,20 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
         return result.getContent().stream().findFirst();
     }
 
+    @Override
+    public Optional<AccountImpl> loadById(Long id) {
+        int page = 0;
+        int size = 1;
+
+        AccountQueryFilter productFilter = new AccountQueryFilter();
+        productFilter.addIds(id);
+        //productFilter.setFacets(Arrays.asList(ProductFilter.ProductFacet.values()));
+
+        Page<AccountImpl> result = searchByFilter(productFilter,PageRequest.of(page,size));
+
+        return result.getContent().stream().findFirst();
+    }
+
 
 
     private void buildWhereClause(AccountQueryFilter accountQueryFilter,

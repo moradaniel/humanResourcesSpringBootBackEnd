@@ -24,9 +24,9 @@ public class AccountQueryFilter /*extends AbstractQueryFilter*/ implements Seria
 
     private static final long serialVersionUID = 1L;
 
-    private List<String> names = new ArrayList<>();
+    private List<Long> ids = new ArrayList<>();
 
-    private String name;
+    private List<String> names = new ArrayList<>();
 
 
     private Boolean enabled;
@@ -62,6 +62,23 @@ public class AccountQueryFilter /*extends AbstractQueryFilter*/ implements Seria
 
     public void addNames(String ... names) {
         this.names.addAll(Arrays.asList(names));
+    }
+
+
+
+    public List<Long> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<Long> ids) {
+        if(CollectionUtils.isNotEmpty(ids)) {
+            this.ids.clear();
+            this.ids.addAll(ids);
+        }
+    }
+
+    public void addIds(Long ... ids) {
+        this.ids.addAll(Arrays.asList(ids));
     }
 
 }
