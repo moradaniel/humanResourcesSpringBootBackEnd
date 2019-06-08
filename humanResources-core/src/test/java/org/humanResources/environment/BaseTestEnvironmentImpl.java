@@ -3,6 +3,7 @@ package org.humanResources.environment;
 
 import org.humanResources.security.model.Account;
 import org.humanResources.security.model.AccountBuilder;
+import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.model.Role;
 import org.humanResources.security.service.AccountService;
 
@@ -18,7 +19,7 @@ public  class BaseTestEnvironmentImpl /*implements BaseTestEnvironment*/{
 	//RoleService roleService;
 
 
-	Map<String, Account> accounts = null;
+	Map<String, AccountImpl> accounts = null;
 	Map<String, Role> roles = null;
 
 
@@ -94,7 +95,7 @@ public  class BaseTestEnvironmentImpl /*implements BaseTestEnvironment*/{
 	private void populateAccounts() {
 
 		//create a defaultuser
-		Account defaultUser = AccountBuilder.anAccount()
+		AccountImpl defaultUser = AccountBuilder.anAccount()
 				.withName(User_defaultUser)
 				/*.withUserName(User_defaultUser)*/
 				.withPassword(defaultPassword)
@@ -147,7 +148,7 @@ public  class BaseTestEnvironmentImpl /*implements BaseTestEnvironment*/{
 
 
 	//@Override
-	public Map<String, Account> getAccounts(){
+	public Map<String, AccountImpl> getAccounts(){
 		return this.accounts;
 	}
 

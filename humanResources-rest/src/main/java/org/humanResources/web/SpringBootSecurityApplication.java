@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         scanBasePackages = {"org.humanResources"})
 
 @EnableJpaRepositories(basePackages = {"org.humanResources"})
-@EntityScan({"org.humanResources","com.baeldung.springbootsecurityrest"})
+@EntityScan({"org.humanResources"})
 
 public class SpringBootSecurityApplication {
 
