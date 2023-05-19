@@ -1,8 +1,8 @@
 package org.humanResources.security.web;
 
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
+//import io.swagger.annotations.ApiImplicitParam;
+//import io.swagger.annotations.ApiImplicitParams;
 import org.apache.commons.lang3.StringUtils;
 import org.humanResources.dto.AccountDTO;
 import org.humanResources.dto.AccountSearchResponseDTO;
@@ -59,7 +59,7 @@ public class AccountController {
           /*      Pageable pageRequest = new PageRequest(0, 1000);
         Page<Account> accounts = accountRepository.findByNameStartsWith(name,pageRequest);
 */
-        final PageRequest page = new PageRequest(0, 20);
+        final PageRequest page = PageRequest.of(0, 20);
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
         accountQueryFilter.addNames(name);
@@ -76,7 +76,7 @@ public class AccountController {
           /*      Pageable pageRequest = new PageRequest(0, 1000);
         Page<Account> accounts = accountRepository.findByNameStartsWith(name,pageRequest);
 */
-        final PageRequest pageRequest = new PageRequest(0, 20);
+        final PageRequest pageRequest = PageRequest.of(0, 20);
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
 
@@ -228,8 +228,8 @@ public class AccountController {
             }
         }*/
 
-        Pageable pageRequest = new PageRequest(repositoryPageIndex, pageSize,
-                orders.isEmpty() ? null : new Sort(orders));
+        Pageable pageRequest = PageRequest.of(repositoryPageIndex, pageSize,
+                orders.isEmpty() ? null : Sort.by(orders));
 
 
  //       ProductFilter productFilter = productFilterMapper.productFilterDTOToProductFilter(productFilterDTO);

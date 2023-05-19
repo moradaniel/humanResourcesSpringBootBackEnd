@@ -1,10 +1,17 @@
 package org.humanResources.dto;
 
+import java.util.Set;
+
 public class AccountDTO {
 
     private Long id;
     private String name;
 
+    private Set<Long> roleIds;
+
+    public AccountDTO(){
+
+    }
 
     public Long getId() {
         return id;

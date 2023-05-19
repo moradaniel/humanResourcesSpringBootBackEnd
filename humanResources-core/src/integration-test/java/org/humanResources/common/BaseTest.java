@@ -2,8 +2,8 @@ package org.humanResources.common;
 
 import org.humanResources.config.DevDatabaseConfig;
 import org.humanResources.config.IntegrationTestsServicesConfig;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -11,7 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.sql.DataSource;
@@ -21,8 +21,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-
+//@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 //the right ServicesConfig class will be instantiated depending on the active Spring profiles
 @ContextConfiguration(classes={
 								DevDatabaseConfig.class,
@@ -57,7 +57,7 @@ public abstract class BaseTest {
 
 	private static boolean initialized = false;
 
-	@Before
+	@BeforeEach
 	public void initializeDB() {
 		if (!initialized) {
 
@@ -116,7 +116,7 @@ public abstract class BaseTest {
     }
 
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 
         emptyTestDatabaseSchema();

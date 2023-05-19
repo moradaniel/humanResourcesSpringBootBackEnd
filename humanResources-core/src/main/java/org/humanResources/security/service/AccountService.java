@@ -1,18 +1,13 @@
 package org.humanResources.security.service;
 
 
-
-import org.humanResources.dto.AccountDTO;
-import org.humanResources.dto.AccountSearchResponseDTO;
 import org.humanResources.security.model.AccountImpl;
-import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.security.repository.AccountQueryFilter;
+import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;

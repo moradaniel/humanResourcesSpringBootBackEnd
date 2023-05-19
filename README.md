@@ -6,6 +6,20 @@
 - Database Oracle 11g 
 
 
+
+### Development
+
+JVM optimization options
+```-noverify or -Xverify:none```: Disables the bytecode verification. So the classloader won’t check the bytecode for dangerous or disallowed behavior.
+```-XX:TieredStopAtLevel=1```: Limits the optimizations of the HotSpot compiler and its runtime overhead.
+
+
+https://phauer.com/2017/increase-jvm-development-productivity/
+
+
+
+
+
 Rest:
 
 ### Swagger
@@ -60,13 +74,10 @@ To avoid running the tests
 
 /parent/$mvn clean install -DskipTests
 
-For Reinke use the "reinke" profile defined in parent-pom
-
-/path/to/ranch/projects/parent-pom$ mvn clean install -DskipTests -Preinke
 
 
-
-
+### Angular pagination
+https://www.bezkoder.com/angular-13-pagination-ngx/
 
 TODO
 Add AWS support with Localstack
@@ -79,3 +90,9 @@ https://www.baeldung.com/spring-security-login-angular
 https://www.baeldung.com/spring-http-logging
 
 https://grokonez.com/spring-framework/spring-security/angular-spring-boot-jwt-authentication-example-angular-6-spring-security-mysql-full-stack-part-1-overview-and-architecture
+
+
+```
+grant create session to HUMAN_RESOURCES;
+grant create session to HUMAN_RESOURCES_TEST;
+```

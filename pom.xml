@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.7.10</spring.boot.version>
 
         <!-- files.to.exclude.from.syncspot-webapp>
             **/syncspot-webapp/
@@ -135,7 +135,7 @@
 			<dependency>
 			    <groupId>commons-beanutils</groupId>
 			    <artifactId>commons-beanutils</artifactId>
-			    <version>1.9.3</version>
+			    <version>1.9.4</version>
 			</dependency>
 
 			<dependency>

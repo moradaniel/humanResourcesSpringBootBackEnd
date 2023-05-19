@@ -11,7 +11,7 @@
         <groupId>org.humanresources</groupId>
         <artifactId>humanresources-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <packaging>jar</packaging>
@@ -80,6 +80,14 @@
 		    <groupId>commons-beanutils</groupId>
 		    <artifactId>commons-beanutils</artifactId>
 		</dependency>
+
+
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <!-- version>${junit5.vintage.version}</version -->
+            <scope>test</scope>
+        </dependency>
 		
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
