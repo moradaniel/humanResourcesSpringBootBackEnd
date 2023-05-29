@@ -1,6 +1,6 @@
 package org.humanResources.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.humanResources.message.request.LoginForm;
 import org.humanResources.message.response.JwtResponse;

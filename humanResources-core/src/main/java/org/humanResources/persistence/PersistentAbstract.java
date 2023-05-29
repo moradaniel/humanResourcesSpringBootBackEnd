@@ -1,6 +1,6 @@
 package org.humanResources.persistence;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 

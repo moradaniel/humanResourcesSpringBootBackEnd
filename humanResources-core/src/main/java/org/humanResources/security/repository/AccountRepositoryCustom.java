@@ -1,6 +1,5 @@
 package org.humanResources.security.repository;
 
-import org.humanResources.security.model.Account;
 import org.humanResources.security.model.AccountImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

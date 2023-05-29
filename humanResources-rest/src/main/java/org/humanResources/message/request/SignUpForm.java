@@ -2,7 +2,7 @@ package org.humanResources.message.request;
 
 import java.util.Set;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 public class SignUpForm {
     @NotBlank

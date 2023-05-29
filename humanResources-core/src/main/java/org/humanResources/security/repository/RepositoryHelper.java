@@ -1,9 +1,9 @@
 package org.humanResources.security.repository;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.Query;
 import java.util.List;
 
 public class RepositoryHelper {

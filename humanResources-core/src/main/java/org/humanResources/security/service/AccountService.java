@@ -1,7 +1,12 @@
 package org.humanResources.security.service;
 
 
+import org.humanResources.dto.AccountDTO;
+import org.humanResources.repository.RoleRepository;
 import org.humanResources.security.model.AccountImpl;
+import org.humanResources.security.model.AccountRoleAssociation;
+import org.humanResources.security.model.Role;
+import org.humanResources.security.model.RoleImpl;
 import org.humanResources.security.repository.AccountQueryFilter;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.util.Result;
@@ -15,10 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.ObjectError;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //@Service
 public class AccountService {
@@ -27,12 +34,16 @@ public class AccountService {
 
 
     AccountRepository accountRepository;
+    RoleRepository roleRepository;
 
     PasswordEncoder passwordEncoder;
 
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder){
+    public AccountService(AccountRepository accountRepository,
+                          RoleRepository roleRepository,
+                          PasswordEncoder passwordEncoder){
         this.accountRepository = accountRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -142,12 +153,12 @@ public class AccountService {
     }
 
     @Transactional
-    public Result<AccountImpl> update(final AccountImpl account){
-        logger.info("Attempting to update account with name: {}",account.getName());
+    public Result<AccountImpl> update(final AccountDTO accountUpdateDTO){
+        logger.info("Attempting to update account with name: {}",accountUpdateDTO.getName());
 
 
         //validate product creation request
-        DataBinder dataBinder = new DataBinder(account);
+        DataBinder dataBinder = new DataBinder(accountUpdateDTO);
        // TODO dataBinder.addValidators(new ProductUpdateOperationValidator(productRepository));
         dataBinder.validate();
 
@@ -160,18 +171,43 @@ public class AccountService {
             }
 
 
-            result = new Result<>(account, errors);
+            result = new Result<>(null, errors);
             return result;
         }
 
         //get existing audit information
         //here we discard any update to audit dates since is managed by JPA
-        AccountImpl existingProduct = loadById(account.getId()).orElseThrow(() -> new EntityNotFoundException("Not found account with id " + account.getId()));
+        AccountImpl existingAccount = loadById(accountUpdateDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Not found account with id " + accountUpdateDTO.getId()));
         //product.setAudit(existingProduct.getAudit());
 
-        existingProduct.setName(account.getName());
+        existingAccount.setName(accountUpdateDTO.getName());
 
-        AccountImpl updatedProduct = this.accountRepository.save(existingProduct);
+
+        //update roles
+        Set<Long> currentRoleIdsSet = existingAccount.getRoles().stream().map(userRole -> userRole.getRole().getId()).collect(Collectors.toSet());
+        Set<Long> newSetOfRoleIdsSet = accountUpdateDTO.getRoleIds();
+
+        Set<Long> rolesToBeDeletedSet = currentRoleIdsSet.stream()
+                .filter(val -> !newSetOfRoleIdsSet.contains(val))
+                .collect(Collectors.toSet());
+
+        Set<Long> rolesToBeAddedSet = newSetOfRoleIdsSet.stream()
+                .filter(val -> !currentRoleIdsSet.contains(val))
+                .collect(Collectors.toSet());
+
+
+        //add the new roles of the user
+        for (Long roleId : rolesToBeAddedSet) {
+            RoleImpl role = roleRepository.findById(roleId/*, Set.of(RoleFilter.RoleFacet.values())*/)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Role with id %s does not exist", roleId)));
+            existingAccount.getRoles().add(new AccountRoleAssociation(existingAccount, role));
+        }
+
+        //delete removed roles from the user
+        existingAccount.getRoles().removeIf(userRole -> rolesToBeDeletedSet.contains(userRole.getRole().getId()));
+
+
+        AccountImpl updatedProduct = this.accountRepository.save(existingAccount);
 
         result = new Result<>(updatedProduct);
         return result;

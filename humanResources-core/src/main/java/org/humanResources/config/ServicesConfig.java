@@ -1,6 +1,7 @@
 package org.humanResources.config;
 
 
+import org.humanResources.repository.RoleRepository;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.security.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 
 @Configuration
@@ -32,6 +33,10 @@ public class ServicesConfig {
     @Qualifier("accountRepository")
     private AccountRepository accountRepository;
 
+    @Autowired
+    @Qualifier("roleRepository")
+    private RoleRepository roleRepository;
+
     /*
     @Autowired
     @Qualifier("roleRepository")
@@ -45,7 +50,7 @@ public class ServicesConfig {
 
     @Bean(name="accountService")
     public AccountService accountService(@Qualifier("passwordEncoder") PasswordEncoder passwordEncoder) {
-        AccountService accountService = new AccountService(accountRepository,passwordEncoder);
+        AccountService accountService = new AccountService(accountRepository,roleRepository,passwordEncoder);
         return accountService;
     }
 

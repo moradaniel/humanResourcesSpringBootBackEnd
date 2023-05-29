@@ -1,11 +1,16 @@
 ## Technologies
 
-- Java 1.8
-- Spring Boot 2.x.x
+- Java 17
+- Spring Boot 3.x.x
 - Hibernate 
 - Database Oracle 11g 
 
 
+### Run the application
+```
+$ cd humanResources-rest
+$ java -jar target/humanResources-rest.jar
+```
 
 ### Development
 

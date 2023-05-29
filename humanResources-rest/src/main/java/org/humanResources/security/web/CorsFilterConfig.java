@@ -12,9 +12,9 @@ import java.util.Arrays;
 /**
  * https://chariotsolutions.com/blog/post/angular-2-spring-boot-jwt-cors_part1/
  */
-@Configuration
+//@Configuration
 public class CorsFilterConfig {
-    @Bean
+    //@Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

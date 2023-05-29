@@ -2,6 +2,7 @@ package org.humanResources.vo;
 
 
 import org.humanResources.dto.AccountDTO;
+import org.humanResources.dto.AccountDetailsResponseDTO;
 import org.humanResources.security.model.AccountImpl;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.*;
                 ProductAwardMapper.class,
                 ProductCertificationAssociationMapper.class,
                 DateMapper.class*/
+                RoleMapper.class
                 }, componentModel = "spring")
 public abstract class AccountMapper {
 
@@ -123,6 +125,12 @@ public abstract class AccountMapper {
 
     })
     public abstract AccountImpl accountDTOToAccount(AccountDTO accountDTO);
+
+    @Mappings({
+            @Mapping(target = "id", source = "account.id"),
+            @Mapping(target = "name", source = "account.name")
+    })
+    public abstract AccountDetailsResponseDTO accountToAccountDetailsResponseDTO(AccountImpl account);
 
 /*
     @AfterMapping

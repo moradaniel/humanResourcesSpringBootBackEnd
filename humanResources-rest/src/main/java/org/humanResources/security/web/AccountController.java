@@ -3,8 +3,10 @@ package org.humanResources.security.web;
 
 //import io.swagger.annotations.ApiImplicitParam;
 //import io.swagger.annotations.ApiImplicitParams;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.humanResources.dto.AccountDTO;
+import org.humanResources.dto.AccountDetailsResponseDTO;
 import org.humanResources.dto.AccountSearchResponseDTO;
 import org.humanResources.security.model.AccountImpl;
 import org.humanResources.security.repository.AccountQueryFilter;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -41,7 +44,7 @@ public class AccountController {
     @Autowired
     AccountMapper accountMapper;
 
-    @RequestMapping(value="/api/account/findByNameStartsWith",
+    @RequestMapping(value="/findByNameStartsWith",
                     method = RequestMethod.GET,
                     produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public @ResponseBody
@@ -50,7 +53,7 @@ public class AccountController {
     }
 
 
-    @RequestMapping(value="/api/account/findByFilter",
+    @RequestMapping(value="/findByFilter",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public @ResponseBody
@@ -68,7 +71,7 @@ public class AccountController {
     }
 
 
-    @RequestMapping(value="/api/accounts",
+    @RequestMapping(value="",
             method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public @ResponseBody Page<AccountDTO> findAccounts(){
@@ -98,7 +101,19 @@ public class AccountController {
 
     }
 
-    @RequestMapping(value="/api/accounts/{id}",
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountDetailsResponseDTO> getAccount(final @PathVariable Long id) {
+        //log.info("Attempting to get role with id:{}", id);
+
+        AccountImpl account = accountService.loadById(id).orElseThrow(() -> new EntityNotFoundException("Not found account with id " + id));
+
+        return ResponseEntity.ok(accountMapper.accountToAccountDetailsResponseDTO(account));
+    }
+
+
+
+    @RequestMapping(value="/{id}",
             method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @ResponseBody
@@ -122,10 +137,10 @@ public class AccountController {
 
 
 
-            AccountImpl product = accountMapper.accountDTOToAccount(accountUpdateDTO);
+            //AccountImpl product = accountMapper.accountDTOToAccount(accountUpdateDTO);
 
             //attempt to save the product
-            Result<AccountImpl> result = accountService.update(product);
+            Result<AccountImpl> result = accountService.update(accountUpdateDTO);
 
             if(result.isOk()){
 /*                ProductFilter productFilter = new ProductFilter();
@@ -303,7 +318,7 @@ public class AccountController {
 
 
 
-        @RequestMapping(value="/api/accounts",
+        @RequestMapping(value="",
             method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public @ResponseBody
@@ -311,5 +326,8 @@ public class AccountController {
         account.setPassword("test");
         return accountService.save(account);
     }
+
+
+
 
 }
