@@ -4,6 +4,7 @@ package org.humanResources.config;
 import org.humanResources.repository.RoleRepository;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.security.service.AccountService;
+import org.humanResources.security.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +53,13 @@ public class ServicesConfig {
     public AccountService accountService(@Qualifier("passwordEncoder") PasswordEncoder passwordEncoder) {
         AccountService accountService = new AccountService(accountRepository,roleRepository,passwordEncoder);
         return accountService;
+    }
+
+
+    @Bean(name="roleService")
+    public RoleService roleService() {
+        RoleService roleService = new RoleService(roleRepository);
+        return roleService;
     }
 
     /*

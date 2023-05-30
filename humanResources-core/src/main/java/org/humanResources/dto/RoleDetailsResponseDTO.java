@@ -8,13 +8,11 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class AccountDetailsResponseDTO {
+public class RoleDetailsResponseDTO {
     @NotNull
     private Long id;
 
     @NotBlank
     private String name;
 
-    @NotEmpty
-    private Set<RoleDetailsResponseDTO> roles;
 }

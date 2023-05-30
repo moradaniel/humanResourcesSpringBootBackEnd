@@ -104,7 +104,7 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountDetailsResponseDTO> getAccount(final @PathVariable Long id) {
-        //log.info("Attempting to get role with id:{}", id);
+        logger.info("Attempting to get account with id:{}", id);
 
         AccountImpl account = accountService.loadById(id).orElseThrow(() -> new EntityNotFoundException("Not found account with id " + id));
 

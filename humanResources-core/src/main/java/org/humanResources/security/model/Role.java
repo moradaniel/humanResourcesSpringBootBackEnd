@@ -1,5 +1,6 @@
 package org.humanResources.security.model;
 
+import org.humanResources.persistence.Persistent;
 import org.humanResources.util.Sorteable;
 
 import java.util.List;
@@ -64,7 +65,7 @@ import java.util.List;
  * 	
  ***************************************************************************************************
  */
-public interface Role extends Sorteable, PermissionsCapable
+public interface Role extends Persistent, Sorteable, PermissionsCapable
 {
 	/** a unique short-hand name for this role */
 	String getName();

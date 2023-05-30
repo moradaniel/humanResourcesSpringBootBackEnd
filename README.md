@@ -82,7 +82,7 @@ To avoid running the tests
 
 
 ### Angular pagination
-https://www.bezkoder.com/angular-13-pagination-ngx/
+https://www.bezkoder.com/angular-15-pagination-ngx/
 
 TODO
 Add AWS support with Localstack

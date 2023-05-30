@@ -1,23 +1,24 @@
-package org.humanResources.security.repository;
+package org.humanResources.repository;
 
-import org.humanResources.security.model.Account;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.humanResources.security.model.AccountImpl;
+import org.humanResources.security.model.RoleImpl;
+import org.humanResources.security.repository.AccountQueryFilter;
+import org.humanResources.security.repository.RepositoryHelper;
+import org.humanResources.security.repository.RoleQueryFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 
-public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ implements AccountRepositoryCustom {
+public class RoleRepositoryImpl /*extends QueryDslRepositorySupport*/ implements RoleRepositoryCustom {
 
     /*public AccountRepositoryImpl() {
         super(AccountImpl.class);
@@ -27,7 +28,7 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
     private EntityManager em;
 
     @Override
-    public Page<AccountImpl> searchByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable) {
+    public Page<RoleImpl> searchByFilter(RoleQueryFilter roleQueryFilter, Pageable pageable) {
   /*
         org.humanResources.security.entity.QAccountImpl account = org.humanResources.security.entity.QAccountImpl.accountImpl;
         QAccountRoleAssociation accountRoleAssociation = QAccountRoleAssociation.accountRoleAssociation;
@@ -49,17 +50,17 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
         List<String> paramNames = new ArrayList<>();
         List<Object> values = new ArrayList<>();
 
-        String select = " Select distinct account ";
-        String countSelect = " Select count(distinct account) ";
+        String select = " Select distinct role ";
+        String countSelect = " Select count(distinct role) ";
 
         StringBuffer queryBuilder = new StringBuffer();
         //queryBuilder.append(" Select account ");
-        queryBuilder.append(" from AccountImpl account ");
-        queryBuilder.append(" left join fetch account.roles roles ");
-        queryBuilder.append(" left join fetch roles.role ");
+        queryBuilder.append(" from RoleImpl role ");
+        //queryBuilder.append(" left join fetch account.roles roles ");
+        //queryBuilder.append(" left join fetch roles.role ");
 
 
-        buildWhereClause(accountQueryFilter,wheres,paramNames,values);
+        buildWhereClause(roleQueryFilter,wheres,paramNames,values);
 
 
         String queryWithoutOrdering = wheres.isEmpty() ? queryBuilder.toString() : queryBuilder.append(" WHERE ").append(
@@ -76,8 +77,8 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
 
 
 
-        return new PageImpl<AccountImpl>(
-                RepositoryHelper.findByNamedParam(em,select+queryWithOrdering, paramNames, values, pageable != null ? new Long(pageable.getOffset()).intValue() : null, pageable != null ? pageable.getPageSize() : null),
+        return new PageImpl<RoleImpl>(
+                RepositoryHelper.findByNamedParam(em,select+queryWithOrdering, paramNames, values, pageable != null ? Long.valueOf(pageable.getOffset()).intValue() : null, pageable != null ? pageable.getPageSize() : null),
                 pageable,
                 RepositoryHelper.countByNamedParam(em,countSelect+queryWithoutOrdering, paramNames, values)
                 );
@@ -86,48 +87,40 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
 
 
     @Override
-    public Optional<AccountImpl> loadByName(String name) {
+    public Optional<RoleImpl> loadByName(String name) {
         int page = 0;
         int size = 1;
 
-        AccountQueryFilter productFilter = new AccountQueryFilter();
-        productFilter.addNames(name);
+        RoleQueryFilter roleFilter = new RoleQueryFilter();
+        roleFilter.addNames(name);
         //productFilter.setFacets(Arrays.asList(ProductFilter.ProductFacet.values()));
 
-        Page<AccountImpl> result = searchByFilter(productFilter,PageRequest.of(page,size));
+        Page<RoleImpl> result = searchByFilter(roleFilter,PageRequest.of(page,size));
 
         return result.getContent().stream().findFirst();
     }
 
     @Override
-    public Optional<AccountImpl> loadById(Long id) {
+    public Optional<RoleImpl> loadById(Long id) {
         int page = 0;
         int size = 1;
 
-        AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
-        accountQueryFilter.addIds(id);
+        RoleQueryFilter roleQueryFilter = new RoleQueryFilter();
+        roleQueryFilter.addIds(id);
         //productFilter.setFacets(Arrays.asList(ProductFilter.ProductFacet.values()));
 
-        Page<AccountImpl> result = searchByFilter(accountQueryFilter,PageRequest.of(page,size));
+        Page<RoleImpl> result = searchByFilter(roleQueryFilter,PageRequest.of(page,size));
 
         return result.getContent().stream().findFirst();
     }
 
 
 
-    private void buildWhereClause(AccountQueryFilter accountQueryFilter,
+    private void buildWhereClause(RoleQueryFilter accountQueryFilter,
                                   List<String> wheres, List<String> paramNames, List<Object> values) {
         if (accountQueryFilter != null) {
 
-            List<Long> ids = accountQueryFilter.getIds();
-
-            if(!CollectionUtils.isEmpty(ids)){
-                wheres.add("  account.id IN ( :ids )  ");
-                paramNames.add("ids");
-                values.add(ids);
-            }
-
-            List<String> names = accountQueryFilter.getNames();
+          /*  List<String> names = accountQueryFilter.getNames();
 
             if(!CollectionUtils.isEmpty(names)){
                 wheres.add("  account.name IN ( :names )  ");
@@ -139,7 +132,7 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
                 wheres.add("  account.enabled = :enabled ");
                 paramNames.add("enabled");
                 values.add(accountQueryFilter.getEnabled());
-            }
+            }*/
         }
     }
 

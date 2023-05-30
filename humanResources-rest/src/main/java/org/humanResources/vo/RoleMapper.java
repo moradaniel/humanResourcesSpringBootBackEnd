@@ -5,7 +5,7 @@ package org.humanResources.vo;
 //import com.mobilenoc.api.entity.UserRoleJpaEntity;
 //import com.mobilenoc.api.port.in.CreateRoleCommand;
 //import com.mobilenoc.api.port.out.ExposedRoleDto;
-import org.humanResources.dto.RoleDetailsDTO;
+import org.humanResources.dto.RoleDetailsResponseDTO;
 import org.humanResources.security.model.AccountRoleAssociation;
 import org.humanResources.security.model.Role;
 import org.mapstruct.*;
@@ -27,14 +27,19 @@ public abstract class RoleMapper /*extends LazyLoadingAwareMapper*/ {
     /*@Mappings({})
     public abstract RoleJpaEntity mapToJpaEntity(Role role);*/
 
-    @Mappings({})
-    public abstract RoleDetailsDTO mapToRoleDetailsDTO(Role source);
+    @Mappings({
+            @Mapping(target = "id", source = "source.id"),
+            @Mapping(target = "name", source = "source.name"),
+    })
+    public abstract RoleDetailsResponseDTO mapToRoleDetailsResponseDTO(Role source);
 
     @Mappings({
             @Mapping(target = "id", source = "accountRoleAssociation.role.id"),
             @Mapping(target = "name", source = "accountRoleAssociation.role.name"),
     })
-    public abstract RoleDetailsDTO mapAccountRoleAssociationToRoleDetailsDTO(AccountRoleAssociation accountRoleAssociation);
+    public abstract RoleDetailsResponseDTO mapAccountRoleAssociationToRoleDetailsResponseDTO(AccountRoleAssociation accountRoleAssociation);
+
+
 
     /*
     public Role.RoleId toRoleId(final Long roleId) {
