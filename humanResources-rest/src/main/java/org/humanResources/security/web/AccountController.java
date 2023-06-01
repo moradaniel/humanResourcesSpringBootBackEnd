@@ -70,32 +70,44 @@ public class AccountController {
         return accountService.findByFilter(accountQueryFilter,page);
     }
 
+    @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public @ResponseBody Page<AccountDTO> findAccounts(
+            @RequestParam(value="pageNumber", required=false, defaultValue = "1") Integer pageNumber,//pageNumber requested
+            //@RequestParam(value="count", required=false) Integer pageSize,//number of rows requested (pagesize)
+            @RequestParam(value="pageSize", required=false, defaultValue = "10") Integer pageSize//,number of rows requested (pagesize)
+    ){
 
-    @RequestMapping(value="",
-            method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public @ResponseBody Page<AccountDTO> findAccounts(){
+        if(pageNumber > 0){
+            pageNumber = pageNumber - 1;  //convert 1 index based to 0 based by decrementing 1
+        }else{
+            pageNumber = 0;
+        }
+
+        if(pageSize > 100){
+            pageSize = 100;
+        }
+
 
           /*      Pageable pageRequest = new PageRequest(0, 1000);
         Page<Account> accounts = accountRepository.findByNameStartsWith(name,pageRequest);
 */
-        final PageRequest pageRequest = PageRequest.of(0, 20);
+        final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
 
         //return accountService.findByFilter(accountQueryFilter,page);
 
-        Page<AccountImpl> productSearchResult = accountService.findByFilter(accountQueryFilter, pageRequest);
+        Page<AccountImpl> accountSearchResult = accountService.findByFilter(accountQueryFilter, pageRequest);
 
-        List<AccountDTO> foundProductsDTOs = new ArrayList<>();
+        List<AccountDTO> foundAccountsDTOs = new ArrayList<>();
 
-        for(AccountImpl product:productSearchResult){
+        for(AccountImpl account:accountSearchResult){
 
-            foundProductsDTOs.add(accountMapper.accountToAccountDTO(product));
+            foundAccountsDTOs.add(accountMapper.accountToAccountDTO(account));
         }
 
-        Page<AccountDTO> result =  new PageImpl<>(foundProductsDTOs, pageRequest,
-                foundProductsDTOs.size());
+        Page<AccountDTO> result =  new PageImpl<>(foundAccountsDTOs, pageRequest,
+                accountSearchResult.getTotalElements());
 
         return result;
 

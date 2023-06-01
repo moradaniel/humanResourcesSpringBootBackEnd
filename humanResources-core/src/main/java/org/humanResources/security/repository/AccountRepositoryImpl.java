@@ -77,7 +77,7 @@ public class AccountRepositoryImpl /*extends QueryDslRepositorySupport*/ impleme
 
 
         return new PageImpl<AccountImpl>(
-                RepositoryHelper.findByNamedParam(em,select+queryWithOrdering, paramNames, values, pageable != null ? new Long(pageable.getOffset()).intValue() : null, pageable != null ? pageable.getPageSize() : null),
+                RepositoryHelper.findByNamedParam(em,select+queryWithOrdering, paramNames, values, pageable != null ? Long.valueOf(pageable.getOffset()).intValue() : null, pageable != null ? pageable.getPageSize() : null),
                 pageable,
                 RepositoryHelper.countByNamedParam(em,countSelect+queryWithoutOrdering, paramNames, values)
                 );
