@@ -1,12 +1,13 @@
 package org.humanResources.security.service;
 
 
+import com.cosium.spring.data.jpa.entity.graph.domain2.DynamicEntityGraph;
+import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraph;
+import jakarta.persistence.EntityNotFoundException;
 import org.humanResources.dto.AccountDTO;
 import org.humanResources.repository.RoleRepository;
-import org.humanResources.security.model.AccountImpl;
-import org.humanResources.security.model.AccountRoleAssociation;
-import org.humanResources.security.model.Role;
-import org.humanResources.security.model.RoleImpl;
+import org.humanResources.repository.specification.AccountSpecifications;
+import org.humanResources.security.model.*;
 import org.humanResources.security.repository.AccountQueryFilter;
 import org.humanResources.security.repository.AccountRepository;
 import org.humanResources.util.Result;
@@ -15,16 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.ObjectError;
 
-import jakarta.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //@Service
@@ -90,6 +90,40 @@ public class AccountService {
     public Page<AccountImpl> findByFilter(AccountQueryFilter accountQueryFilter, Pageable pageable){
         return accountRepository.searchByFilter(accountQueryFilter, pageable);
     }
+
+    @Transactional
+    public Page<AccountImpl> findByFilter2(AccountQueryFilter accountQueryFilter, Pageable pageable){
+       // return accountRepository.searchByFilter(accountQueryFilter, pageable);
+        //return accountRepository.findAll(specification, pageable, new NamedEntityGraph(EntityGraphType.FETCH, "graphName"))
+
+        //Accounten
+        return accountRepository.findAll(pageable/*PageRequest.of(0,2000)*/, DynamicEntityGraph.loading().addPath(AccountImpl_.ROLES/*, AccountRoleAssociation_.ROLE*/).build());
+
+    }
+
+
+    @Transactional
+    public Page<AccountImpl> findByFilter3(AccountQueryFilter accountQueryFilter, Pageable page){
+        // Getting film ids and page data to prevent:
+        // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
+        // which affects application's performance
+        Page<Long> filmIdsPage = this.accountRepository.findEntityIds(page);
+
+        List<AccountImpl> result;
+        List<Long> filmIds = filmIdsPage.getContent();
+        if (CollectionUtils.isEmpty(filmIds)) {
+            result = List.of();
+        } else {
+            // Retrieve accounts using IN predicate
+            Specification<AccountImpl> fimlIdInSpecification = AccountSpecifications.idIn(Set.copyOf(filmIds));
+            result = this.accountRepository.findAll(fimlIdInSpecification,
+                    DynamicEntityGraph.loading().addPath(AccountImpl_.ROLES, AccountRoleAssociation_.ROLE).build());
+        }
+        return PageableExecutionUtils.getPage(result, page, () -> filmIdsPage.getTotalElements());
+        //return result;
+    }
+
+
 
     @Transactional
     public Page<AccountImpl> findByCriteria(AccountQueryFilter accountQueryFilter, Pageable pageable) {

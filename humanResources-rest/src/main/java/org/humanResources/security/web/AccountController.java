@@ -97,7 +97,7 @@ public class AccountController {
 
         //return accountService.findByFilter(accountQueryFilter,page);
 
-        Page<AccountImpl> accountSearchResult = accountService.findByFilter(accountQueryFilter, pageRequest);
+        Page<AccountImpl> accountSearchResult = accountService.findByFilter3(accountQueryFilter, pageRequest);
 
         List<AccountDTO> foundAccountsDTOs = new ArrayList<>();
 
