@@ -4,6 +4,10 @@ package org.humanResources.security.web;
 //import io.swagger.annotations.ApiImplicitParam;
 //import io.swagger.annotations.ApiImplicitParams;
 import jakarta.persistence.EntityNotFoundException;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.apache.commons.lang3.StringUtils;
 import org.humanResources.dto.AccountDTO;
 import org.humanResources.dto.AccountDetailsResponseDTO;
@@ -20,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +77,11 @@ public class AccountController {
 
     @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public @ResponseBody Page<AccountDTO> findAccounts(
+            @And({
+                    @Spec(path = "name", params = "search", spec = LikeIgnoreCase.class)/*,
+                    @Spec(path = "lastName", spec = Equal.class),
+                    @Spec(path = "status", spec = Equal.class)*/
+            }) Specification<AccountImpl> accountSpec,
             @RequestParam(value="pageNumber", required=false, defaultValue = "1") Integer pageNumber,//pageNumber requested
             //@RequestParam(value="count", required=false) Integer pageSize,//number of rows requested (pagesize)
             @RequestParam(value="pageSize", required=false, defaultValue = "10") Integer pageSize//,number of rows requested (pagesize)
@@ -87,17 +97,13 @@ public class AccountController {
             pageSize = 100;
         }
 
-
-          /*      Pageable pageRequest = new PageRequest(0, 1000);
-        Page<Account> accounts = accountRepository.findByNameStartsWith(name,pageRequest);
-*/
         final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
 
         //return accountService.findByFilter(accountQueryFilter,page);
 
-        Page<AccountImpl> accountSearchResult = accountService.findByFilter3(accountQueryFilter, pageRequest);
+        Page<AccountImpl> accountSearchResult = accountService.findByFilter3(accountQueryFilter, accountSpec, pageRequest);
 
         List<AccountDTO> foundAccountsDTOs = new ArrayList<>();
 

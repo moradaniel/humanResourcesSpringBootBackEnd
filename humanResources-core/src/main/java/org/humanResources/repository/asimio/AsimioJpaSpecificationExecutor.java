@@ -14,9 +14,9 @@ import java.io.Serializable;
 public interface AsimioJpaSpecificationExecutor<E, ID extends Serializable>
         extends JpaSpecificationExecutor<E> {
 
-    Page<ID> findEntityIds(Pageable pageable);
+    //Page<ID> findEntityIds(Pageable pageable);
 
-    //Page<ID> findEntityIds(Specification<E> spec, Pageable pageable);
+    Page<ID> findEntityIds(Specification<E> spec, Pageable pageable);
 
     //Page<ID> findEntityIds(NamedQueryParametersSpecification<E> parametrizedSpec, Pageable pageable);
 }

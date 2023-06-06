@@ -2,7 +2,6 @@ package org.humanResources.security.service;
 
 
 import com.cosium.spring.data.jpa.entity.graph.domain2.DynamicEntityGraph;
-import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraph;
 import jakarta.persistence.EntityNotFoundException;
 import org.humanResources.dto.AccountDTO;
 import org.humanResources.repository.RoleRepository;
@@ -103,11 +102,11 @@ public class AccountService {
 
 
     @Transactional
-    public Page<AccountImpl> findByFilter3(AccountQueryFilter accountQueryFilter, Pageable page){
+    public Page<AccountImpl> findByFilter3(AccountQueryFilter accountQueryFilter, Specification<AccountImpl> accountSpec, Pageable page){
         // Getting film ids and page data to prevent:
         // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
         // which affects application's performance
-        Page<Long> filmIdsPage = this.accountRepository.findEntityIds(page);
+        Page<Long> filmIdsPage = this.accountRepository.findEntityIds(accountSpec, page);
 
         List<AccountImpl> result;
         List<Long> filmIds = filmIdsPage.getContent();

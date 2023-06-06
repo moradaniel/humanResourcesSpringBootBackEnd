@@ -3,19 +3,19 @@ package org.humanResources.repository.asimio;
 import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphSimpleJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.Assert;
+
 import static org.springframework.data.jpa.repository.query.QueryUtils.toOrders;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,13 +33,22 @@ public class AsimioSimpleJpaRepository<E, ID extends Serializable> extends Entit
     }
 
     @Override
-    public Page<ID> findEntityIds(Pageable pageable) {
+    public Page<ID> findEntityIds(Specification spec, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<ID> criteriaQuery = criteriaBuilder.createQuery(this.entityInformation.getIdType());
         Root<E> root = criteriaQuery.from(this.getDomainClass());
 
         // Get the entities ID only
         criteriaQuery.select((Path<ID>) root.get(this.entityInformation.getIdAttribute()));
+
+        //https://github.com/pzhgugu/go/blob/fa1ef1698f35378913c571dbe1877710117963ea/go-core/src/main/java/com/ansteel/core/repository/BaseRepositoryImpl.java#L8
+        //update where
+        if (spec != null) {
+            Predicate predicate = spec.toPredicate(root, criteriaQuery, criteriaBuilder);
+            if (predicate != null) {
+                criteriaQuery.where(predicate);
+            }
+        }
 
         // Update Sorting
         Sort sort = pageable.isPaged() ? pageable.getSort() : Sort.unsorted();
