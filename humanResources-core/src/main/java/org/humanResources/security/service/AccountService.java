@@ -2,6 +2,7 @@ package org.humanResources.security.service;
 
 
 import com.cosium.spring.data.jpa.entity.graph.domain2.DynamicEntityGraph;
+import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraph;
 import jakarta.persistence.EntityNotFoundException;
 import org.humanResources.dto.AccountDTO;
 import org.humanResources.repository.RoleRepository;
@@ -114,8 +115,8 @@ public class AccountService {
             result = List.of();
         } else {
             // Retrieve accounts using IN predicate
-            Specification<AccountImpl> fimlIdInSpecification = AccountSpecifications.idIn(Set.copyOf(filmIds));
-            result = this.accountRepository.findAll(fimlIdInSpecification,
+            Specification<AccountImpl> accountIdInSpecification = AccountSpecifications.idIn(Set.copyOf(filmIds));
+            result = this.accountRepository.findAll(accountIdInSpecification,
                     DynamicEntityGraph.loading().addPath(AccountImpl_.ROLES, AccountRoleAssociation_.ROLE).build());
         }
         return PageableExecutionUtils.getPage(result, page, () -> filmIdsPage.getTotalElements());
@@ -249,6 +250,10 @@ public class AccountService {
 
    // @Override
     public Optional<AccountImpl> loadById(Long id) {
-        return accountRepository.loadById(id);
+
+        Specification<AccountImpl> accountIdInSpecification = AccountSpecifications.idEquals(id);
+        return this.accountRepository.findOne(accountIdInSpecification,
+                DynamicEntityGraph.loading().addPath(AccountImpl_.ROLES, AccountRoleAssociation_.ROLE).build());
+
     }
 }

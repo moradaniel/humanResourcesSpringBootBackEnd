@@ -9,10 +9,15 @@ import java.util.Set;
 
 public final class AccountSpecifications {
 
-    public static Specification<AccountImpl> idIn(Set<Long> filmIds) {
-        if (CollectionUtils.isEmpty(filmIds)) {
+    public static Specification<AccountImpl> idIn(Set<Long> accountIds) {
+        if (CollectionUtils.isEmpty(accountIds)) {
             return null;
         }
-        return (root, query, builder) -> root.get(AccountImpl_.id).in(filmIds);
+        return (root, query, builder) -> root.get(AccountImpl_.id).in(accountIds);
+    }
+
+    public static Specification<AccountImpl> idEquals(Long id) {
+        return (root, query, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get(AccountImpl_.ID), id);
     }
 }
