@@ -51,7 +51,7 @@ public class AccountController {
 
     @RequestMapping(value="/findByNameStartsWith",
                     method = RequestMethod.GET,
-                    produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+                    produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     Page<AccountImpl> findByNameStartsWith(@RequestParam("name") String name){
         return accountService.findByNameStartsWith(name);
@@ -60,7 +60,7 @@ public class AccountController {
 
     @RequestMapping(value="/findByFilter",
             method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     Page<AccountImpl> findByFilter(@RequestParam("name") String name){
 
@@ -75,7 +75,7 @@ public class AccountController {
         return accountService.findByFilter(accountQueryFilter,page);
     }
 
-    @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody Page<AccountDTO> findAccounts(
             @And({
                     @Spec(path = "name", params = "search", spec = LikeIgnoreCase.class)/*,
@@ -84,10 +84,11 @@ public class AccountController {
             }) Specification<AccountImpl> accountSpec,
             @RequestParam(value="pageNumber", required=false, defaultValue = "1") Integer pageNumber,//pageNumber requested
             //@RequestParam(value="count", required=false) Integer pageSize,//number of rows requested (pagesize)
-            @RequestParam(value="pageSize", required=false, defaultValue = "10") Integer pageSize//,number of rows requested (pagesize)
+            @RequestParam(value="pageSize", required=false, defaultValue = "10") Integer pageSize,//,number of rows requested (pagesize),
+            Pageable pageable
     ){
 
-        if(pageNumber > 0){
+        /*if(pageNumber > 0){
             pageNumber = pageNumber - 1;  //convert 1 index based to 0 based by decrementing 1
         }else{
             pageNumber = 0;
@@ -97,13 +98,13 @@ public class AccountController {
             pageSize = 100;
         }
 
-        final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        final PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);*/
 
         AccountQueryFilter accountQueryFilter = new AccountQueryFilter();
 
         //return accountService.findByFilter(accountQueryFilter,page);
 
-        Page<AccountImpl> accountSearchResult = accountService.findByFilter3(accountQueryFilter, accountSpec, pageRequest);
+        Page<AccountImpl> accountSearchResult = accountService.findByFilter3(accountQueryFilter, accountSpec, pageable);
 
         List<AccountDTO> foundAccountsDTOs = new ArrayList<>();
 
@@ -112,7 +113,7 @@ public class AccountController {
             foundAccountsDTOs.add(accountMapper.accountToAccountDTO(account));
         }
 
-        Page<AccountDTO> result =  new PageImpl<>(foundAccountsDTOs, pageRequest,
+        Page<AccountDTO> result =  new PageImpl<>(foundAccountsDTOs, pageable,
                 accountSearchResult.getTotalElements());
 
         return result;
@@ -133,7 +134,7 @@ public class AccountController {
 
     @RequestMapping(value="/{id}",
             method = RequestMethod.PUT,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<ApiResponse<AccountDTO>> updateAccount(/*@Valid*/ @RequestBody AccountDTO accountUpdateDTO, @PathVariable long id, BindingResult bindingResult){
 
@@ -207,7 +208,7 @@ public class AccountController {
 //    })
     @RequestMapping(value="/api/accounts2", ///search/accounts
             method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<SearchResponse<AccountSearchResponseDTO>> findAccountsByCriteriaPaginated(
             AccountQueryFilter accountQueryFilterDTO,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer webPageIndex,
@@ -338,7 +339,7 @@ public class AccountController {
 
         @RequestMapping(value="",
             method = RequestMethod.POST,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     AccountImpl saveAccount(@RequestBody AccountImpl account){
         account.setPassword("test");

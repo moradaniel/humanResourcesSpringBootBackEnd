@@ -107,20 +107,20 @@ public class AccountService {
         // Getting film ids and page data to prevent:
         // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
         // which affects application's performance
-        Page<Long> filmIdsPage = this.accountRepository.findEntityIds(accountSpec, page);
+        Page<Long> accountIdsPage = this.accountRepository.findEntityIds(accountSpec, page);
 
         List<AccountImpl> result;
-        List<Long> filmIds = filmIdsPage.getContent();
-        if (CollectionUtils.isEmpty(filmIds)) {
+        List<Long> accountIds = accountIdsPage.getContent();
+        if (CollectionUtils.isEmpty(accountIds)) {
             result = List.of();
         } else {
             // Retrieve accounts using IN predicate
-            Specification<AccountImpl> accountIdInSpecification = AccountSpecifications.idIn(Set.copyOf(filmIds));
-            result = this.accountRepository.findAll(accountIdInSpecification,
+            Specification<AccountImpl> accountIdInSpecification = AccountSpecifications.idIn(Set.copyOf(accountIds));
+            result = this.accountRepository.findAll(accountIdInSpecification,page.getSort(),
                     DynamicEntityGraph.loading().addPath(AccountImpl_.ROLES, AccountRoleAssociation_.ROLE).build());
         }
-        return PageableExecutionUtils.getPage(result, page, () -> filmIdsPage.getTotalElements());
-        //return result;
+        return PageableExecutionUtils.getPage(result, page, () -> accountIdsPage.getTotalElements());
+
     }
 
 
